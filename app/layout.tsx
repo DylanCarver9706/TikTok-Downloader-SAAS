@@ -12,8 +12,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "TTok Downloader",
   description: "TTok Downloader",
+  // Only works for development. For production, use the favicon.ico file.
   icons: {
     icon: "/TTokDownloaderLogo.PNG",
+    shortcut: "/TTokDownloaderLogo.PNG",
     apple: "/TTokDownloaderLogo.PNG",
   },
 };
