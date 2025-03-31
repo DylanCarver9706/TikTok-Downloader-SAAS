@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     apple: "/TTokDownloaderLogo.PNG",
   },
   other: {
-    "google-adsense-account": config.googleAdsenseId,
+    "google-adsense-account": process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID ?? "",
   },
 };
 
