@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { PostHogProvider } from "./providers/posthog";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
-import { GoogleAdSense } from "@/components/GoogleAdSense";
-
+import Script from "next/script";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { Suspense } from "react";
@@ -19,6 +18,9 @@ export const metadata: Metadata = {
     shortcut: "/TTokDownloaderLogo.PNG",
     apple: "/TTokDownloaderLogo.PNG",
   },
+  other: {
+    "google-adsense-account": "ca-pub-1127909906618614",
+  },
 };
 
 export default function RootLayout({
@@ -29,9 +31,6 @@ export default function RootLayout({
   return (
     <Suspense>
       <html lang="en" suppressHydrationWarning>
-        <head>
-          <GoogleAdSense />
-        </head>
         <body className={inter.className} suppressHydrationWarning>
           <PostHogProvider>
             <Navbar />
