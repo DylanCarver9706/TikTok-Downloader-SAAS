@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { PostHogProvider } from "./providers/posthog";
-import { Inter } from "next/font/google";
-import { Toaster } from "sonner";
-import Script from "next/script";
-import "./globals.css";
-import { Navbar } from "@/components/navbar";
 import { Suspense } from "react";
+import { PostHogProvider } from "./providers/posthog";
+import { Navbar } from "@/components/navbar";
+import { Toaster } from "sonner";
+import { Inter } from "next/font/google";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +18,7 @@ export const metadata: Metadata = {
     apple: "/TTokDownloaderLogo.PNG",
   },
   other: {
-    "google-adsense-account": "ca-pub-1127909906618614",
+    "google-adsense-account": process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID,
   },
 };
 
