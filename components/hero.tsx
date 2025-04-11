@@ -1,6 +1,13 @@
 "use client";
 
-import { Download, Music, Video, Smartphone, Globe, Zap } from "lucide-react";
+import {
+  Music,
+  Video,
+  Zap,
+  DownloadCloud,
+  Award,
+  DollarSign,
+} from "lucide-react";
 
 export function Hero() {
   return (
@@ -15,22 +22,34 @@ export function Hero() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-red-500">
+          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-theme-600">
             <div className="flex justify-center mb-4">
-              <div className="p-3 bg-red-100 rounded-full">
-                <Video className="h-8 w-8 text-red-600" />
+              <div className="p-3 bg-theme-50 rounded-full">
+                <Video className="h-8 w-8 text-theme-600" />
               </div>
             </div>
-            <h3 className="text-lg font-semibold mb-2">No Watermark</h3>
+            <h3 className="text-lg font-semibold mb-2">Video Download</h3>
             <p className="text-gray-600">
-              Download TikTok videos without the watermark
+              Download single TikTok videos in HD quality
             </p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-red-500">
+          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-theme-600">
             <div className="flex justify-center mb-4">
-              <div className="p-3 bg-red-100 rounded-full">
-                <Music className="h-8 w-8 text-red-600" />
+              <div className="p-3 bg-theme-50 rounded-full">
+                <DownloadCloud className="h-8 w-8 text-theme-600" />
+              </div>
+            </div>
+            <h3 className="text-lg font-semibold mb-2">Bulk Download</h3>
+            <p className="text-gray-600">
+              Download multiple TikTok videos at once
+            </p>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-theme-600">
+            <div className="flex justify-center mb-4">
+              <div className="p-3 bg-theme-50 rounded-full">
+                <Music className="h-8 w-8 text-theme-600" />
               </div>
             </div>
             <h3 className="text-lg font-semibold mb-2">MP3 Download</h3>
@@ -39,10 +58,10 @@ export function Hero() {
             </p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-red-500">
+          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-theme-600">
             <div className="flex justify-center mb-4">
-              <div className="p-3 bg-red-100 rounded-full">
-                <Download className="h-8 w-8 text-red-600" />
+              <div className="p-3 bg-theme-50 rounded-full">
+                <Award className="h-8 w-8 text-theme-600" />
               </div>
             </div>
             <h3 className="text-lg font-semibold mb-2">HD Quality</h3>
@@ -51,34 +70,22 @@ export function Hero() {
             </p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-red-500">
+          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-theme-600">
             <div className="flex justify-center mb-4">
-              <div className="p-3 bg-red-100 rounded-full">
-                <Smartphone className="h-8 w-8 text-red-600" />
-              </div>
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Mobile Friendly</h3>
-            <p className="text-gray-600">
-              Works perfectly on all devices and browsers
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-red-500">
-            <div className="flex justify-center mb-4">
-              <div className="p-3 bg-red-100 rounded-full">
-                <Globe className="h-8 w-8 text-red-600" />
+              <div className="p-3 bg-theme-50 rounded-full">
+                <DollarSign className="h-8 w-8 text-theme-600" />
               </div>
             </div>
             <h3 className="text-lg font-semibold mb-2">100% Free</h3>
             <p className="text-gray-600">
-              No registration required, completely free to use
+              No subscriptions or hidden fees, completely free
             </p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-red-500">
+          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border-t-4 border-theme-600">
             <div className="flex justify-center mb-4">
-              <div className="p-3 bg-red-100 rounded-full">
-                <Zap className="h-8 w-8 text-red-600" />
+              <div className="p-3 bg-theme-50 rounded-full">
+                <Zap className="h-8 w-8 text-theme-600" />
               </div>
             </div>
             <h3 className="text-lg font-semibold mb-2">Fast Download</h3>
