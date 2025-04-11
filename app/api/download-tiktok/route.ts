@@ -1,5 +1,14 @@
 import { NextResponse } from "next/server";
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "500mb",
+    },
+    responseLimit: false,
+  },
+};
+
 // Helper function to sanitize filenames
 function sanitizeFilename(filename: string): string {
   // Replace any characters that are not alphanumeric, dots, or underscores with an underscore
