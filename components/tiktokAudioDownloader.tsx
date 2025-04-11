@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { saveAs } from "file-saver";
-import { Download, X, Music } from "lucide-react";
+import { X, Music } from "lucide-react";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
 import { Card } from "./ui/card";

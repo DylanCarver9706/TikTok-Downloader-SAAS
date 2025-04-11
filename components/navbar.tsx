@@ -39,6 +39,11 @@ export function Navbar() {
                   DOWNLOAD VIDEO
                 </Button>
               </Link>
+              <Link href="/download-bulk">
+                <Button variant="ghost" className="text-gray-700 text-md">
+                  BULK DOWNLOAD VIDEO
+                </Button>
+              </Link>
               <Link href="/download-audio">
                 <Button variant="ghost" className="text-gray-700 text-md">
                   DOWNLOAD AUDIO
@@ -106,6 +111,14 @@ export function Navbar() {
                   className="w-full justify-center text-center text-gray-700"
                 >
                   DOWNLOAD VIDEO
+                </Button>
+              </Link>
+              <Link href="/download-bulk" onClick={handleMobileItemClick}>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-center text-center text-gray-700"
+                >
+                  BULK DOWNLOAD VIDEO
                 </Button>
               </Link>
               <Link href="/download-audio" onClick={handleMobileItemClick}>
