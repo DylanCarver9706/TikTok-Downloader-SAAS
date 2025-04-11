@@ -11,7 +11,7 @@ export default function PrivacyPolicy() {
             Pursuant to our{" "}
             <Link
               href="/terms-of-use"
-              className="text-red-600 hover:text-red-800"
+              className="text-theme-700 hover:text-theme-900"
             >
               Terms of Use
             </Link>

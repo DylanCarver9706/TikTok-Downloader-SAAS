@@ -15,7 +15,7 @@ export default function ContactUs() {
               Email:{" "}
               <a
                 href="mailto:carverendeavors@gmail.com"
-                className="text-red-600 hover:text-red-800"
+                className="text-theme-700 hover:text-theme-900"
               >
                 carverendeavors@gmail.com
               </a>

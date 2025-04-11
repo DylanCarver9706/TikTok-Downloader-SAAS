@@ -427,25 +427,11 @@ export default function TermsOfUse() {
               We retain a separate{" "}
               <Link
                 href="/privacy-policy"
-                className="text-red-600 hover:text-red-800"
+                className="text-theme-700 hover:text-theme-900"
               >
                 Privacy Policy
               </Link>{" "}
-              and your assent to these Terms also signifies your assent to the{" "}
-              <Link
-                href="/privacy-policy"
-                className="text-red-600 hover:text-red-800"
-              >
-                Privacy Policy
-              </Link>
-              . We reserve the right to amend the{" "}
-              <Link
-                href="/privacy-policy"
-                className="text-red-600 hover:text-red-800"
-              >
-                Privacy Policy
-              </Link>{" "}
-              at any time by posting such amendments to the Website. No other
+              and your assent to these Terms also signifies your assent to the Privacy Policy. We reserve the right to amend the Privacy Policy at any time by posting such amendments to the Website. No other
               notification may be made to you about any amendments. Your
               continued use of the Website following such amendments will
               constitute your acceptance of such amendments, regardless of
