@@ -45,6 +45,7 @@ export function TikTokBulkDownloader() {
       setProcessing(true);
       setProgress(0);
       setFailedDownloads([]);
+      let currentFailedDownloads = [];
       const urlList = urls.split(",").map((url) => url.trim());
       setTotalVideos(urlList.length);
       setCurrentVideo(0);
@@ -80,8 +81,19 @@ export function TikTokBulkDownloader() {
           setCurrentVideo(i + 1);
         } catch (error) {
           console.error(`Error processing video from ${urlList[i]}:`, error);
+          currentFailedDownloads.push(urlList[i]);
           setFailedDownloads((prev) => [...prev, urlList[i]]);
         }
+      }
+
+      // Check if any videos were successfully downloaded
+      if (Object.keys(zip.files).length === 0) {
+        toast.error("No videos downloaded", {
+          description:
+            "All videos failed to download. Please check your URLs and try again.",
+          duration: 5000,
+        });
+        return;
       }
 
       // Generate the ZIP file
@@ -89,9 +101,9 @@ export function TikTokBulkDownloader() {
       saveAs(zipBlob, "tiktok-videos.zip");
 
       // Show success message with failed downloads if any
-      if (failedDownloads.length > 0) {
+      if (currentFailedDownloads.length > 0) {
         toast.success("Download completed with some failures", {
-          description: `Failed to download ${failedDownloads.length} videos. Check the list below.`,
+          description: `Successfully downloaded ${Object.keys(zip.files).length} videos. Failed to download ${currentFailedDownloads.length} videos.`,
           duration: 5000,
         });
       } else {
@@ -163,11 +175,11 @@ export function TikTokBulkDownloader() {
 
             {/* Failed Downloads List */}
             {failedDownloads.length > 0 && (
-              <div className="mt-4 p-4 bg-red-50 rounded-lg">
-                <h3 className="text-sm font-medium text-red-800 mb-2">
+              <div className="mt-4 p-4 bg-theme-50 rounded-lg">
+                <h3 className="text-sm font-medium text-theme-800 mb-2">
                   Failed Downloads ({failedDownloads.length}):
                 </h3>
-                <ul className="text-sm text-red-600 space-y-1">
+                <ul className="text-sm text-theme-600 space-y-1">
                   {failedDownloads.map((url, index) => (
                     <li key={index} className="truncate">
                       {url}
