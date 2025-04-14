@@ -6,16 +6,6 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-// Debug logging for environment variables
-console.log("Environment Variables Check:");
-console.log("S3_REGION:", process.env.S3_REGION);
-console.log("S3_ACCESS_KEY:", process.env.S3_ACCESS_KEY);
-console.log(
-  "S3_SECRET_ACCESS_KEY:",
-  process.env.S3_SECRET_ACCESS_KEY
-);
-console.log("S3_BUCKET_NAME:", process.env.S3_BUCKET_NAME);
-
 // Create S3 client
 const s3Client = new S3Client({
   region: process.env.S3_REGION,
