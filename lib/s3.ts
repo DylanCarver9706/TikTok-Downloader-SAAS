@@ -16,6 +16,7 @@ const s3Client = new S3Client({
 });
 
 const BUCKET_NAME = process.env.S3_BUCKET_NAME!;
+console.log(BUCKET_NAME);
 
 // Function to upload file to S3 and get pre-signed URL
 export async function uploadToS3AndGetUrl(

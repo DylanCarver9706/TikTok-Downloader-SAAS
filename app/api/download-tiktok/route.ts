@@ -143,6 +143,8 @@ export async function POST(req: Request) {
       result.data.filename
     );
 
+    console.log(downloadUrl);
+
     return NextResponse.json({
       downloadUrl,
       filename: result.data.filename,
