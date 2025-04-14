@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import ffmpeg from "ffmpeg.js/ffmpeg-mp4.js";
 import { uploadToS3AndGetUrl } from "@/lib/s3";
+import { downloadWithRetry } from "@/lib/tiktok";
 
 export async function POST(request: Request) {
   try {
@@ -10,36 +11,26 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "URL is required" }, { status: 400 });
     }
 
-    // Get the video from our download-tiktok endpoint
-    const baseUrl = new URL(request.url).origin;
-    const videoResponse = await fetch(`${baseUrl}/api/download-tiktok`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url }),
-    });
+    // Download the video directly using the shared function
+    const result = await downloadWithRetry(url);
 
-    if (!videoResponse.ok) {
-      const errorData = await videoResponse.json();
-      throw new Error(errorData.error || "Failed to download video");
+    if (!result.success || !result.data) {
+      console.error("Video download failed:", result.error);
+      return NextResponse.json(
+        {
+          error: `Failed to download video: ${
+            result.error?.message || "Unknown error"
+          }`,
+        },
+        { status: 500 }
+      );
     }
 
-    const { downloadUrl: videoDownloadUrl, filename: videoFilename } =
-      await videoResponse.json();
-
-    // Download the video from S3
-    const videoBlobResponse = await fetch(videoDownloadUrl);
-    if (!videoBlobResponse.ok) {
-      throw new Error("Failed to download video from S3");
-    }
-
-    const videoBlob = await videoBlobResponse.blob();
-    const videoBuffer = await videoBlob.arrayBuffer();
-    const videoData = new Uint8Array(videoBuffer);
+    // Convert video buffer to Uint8Array for ffmpeg
+    const videoData = new Uint8Array(result.data.buffer);
 
     // Run ffmpeg to extract audio with suppressed output
-    const result = ffmpeg({
+    const ffmpegResult = ffmpeg({
       MEMFS: [{ name: "input.mp4", data: videoData }],
       arguments: [
         "-i",
@@ -58,13 +49,13 @@ export async function POST(request: Request) {
     });
 
     // Get the output file
-    const outputFile = result.MEMFS[0];
+    const outputFile = ffmpegResult.MEMFS[0];
     if (!outputFile) {
       throw new Error("Failed to extract audio");
     }
 
     // Generate a filename for the audio file
-    const audioFilename = videoFilename.replace(".mp4", ".mp3");
+    const audioFilename = result.data.filename.replace(".mp4", ".mp3");
 
     // Upload to S3 and get pre-signed URL
     const { url: downloadUrl } = await uploadToS3AndGetUrl(
