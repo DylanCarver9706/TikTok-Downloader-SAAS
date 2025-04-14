@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { uploadToS3AndGetUrl } from "@/lib/s3";
 
 export const config = {
   api: {
@@ -112,7 +113,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "URL is required" }, { status: 400 });
     }
 
-    // Validate TikTok URL
     if (
       !url.includes("tiktok.com") ||
       !url.includes(".com/@") ||
@@ -137,16 +137,20 @@ export async function POST(req: Request) {
       );
     }
 
-    return new NextResponse(result.data.buffer, {
-      headers: {
-        "Content-Type": "video/mp4",
-        "Content-Disposition": `attachment; filename="${result.data.filename}"`,
-        "X-Filename": result.data.filename,
-      },
+    // Upload to S3 and get pre-signed URL
+    const { url: downloadUrl } = await uploadToS3AndGetUrl(
+      result.data.buffer,
+      result.data.filename
+    );
+
+    return NextResponse.json({
+      downloadUrl,
+      filename: result.data.filename,
     });
   } catch (error) {
+    console.error("Error processing request:", error);
     return NextResponse.json(
-      { error: "Failed to download video" },
+      { error: "Failed to process request" },
       { status: 500 }
     );
   }

@@ -33,7 +33,7 @@ export function TikTokDownloader() {
       setProcessing(true);
       setProgress(0);
 
-      // Call your API endpoint to get the video
+      // Call your API endpoint to get the pre-signed URL
       const response = await fetch("/api/download-tiktok", {
         method: "POST",
         headers: {
@@ -43,24 +43,32 @@ export function TikTokDownloader() {
       });
 
       if (!response.ok) {
-        toast.error("Failed to download video");
-        return;
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to download video");
       }
 
-      const blob = await response.blob();
-      const filename = response.headers.get("X-Filename");
-      if (filename) {
-        saveAs(blob, filename);
-      } else {
-        toast.error("Failed to get filename");
+      const { downloadUrl, filename } = await response.json();
+
+      // Download the video from S3
+      const videoResponse = await fetch(downloadUrl);
+      if (!videoResponse.ok) {
+        throw new Error("Failed to download video from S3");
       }
+
+      const blob = await videoResponse.blob();
+
+      // Use the filename from the API response
+      saveAs(blob, filename);
 
       toast.success("Success!", {
         description: "Your TikTok video has been downloaded successfully",
       });
     } catch (error) {
+      console.error("Error downloading video:", error);
       toast.error("Error", {
-        description: `Failed to download video: ${error}`,
+        description: `Failed to download video: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
       });
     } finally {
       setProcessing(false);

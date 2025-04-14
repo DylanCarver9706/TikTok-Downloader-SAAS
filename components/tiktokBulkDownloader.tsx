@@ -16,6 +16,9 @@ export function TikTokBulkDownloader() {
   const [currentVideo, setCurrentVideo] = useState(0);
   const [totalVideos, setTotalVideos] = useState(0);
   const [failedDownloads, setFailedDownloads] = useState<string[]>([]);
+  const [downloadedVideos, setDownloadedVideos] = useState<
+    { url: string; filename: string; blob: Blob }[]
+  >([]);
 
   const handleUrlsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setUrls(e.target.value);
@@ -24,6 +27,7 @@ export function TikTokBulkDownloader() {
   const clearUrls = () => {
     setUrls("");
     setFailedDownloads([]);
+    setDownloadedVideos([]);
   };
 
   // Update progress based on current video
@@ -45,17 +49,17 @@ export function TikTokBulkDownloader() {
       setProcessing(true);
       setProgress(0);
       setFailedDownloads([]);
-      let currentFailedDownloads = [];
+      let downloadedVideos = [];
       const urlList = urls.split(",").map((url) => url.trim());
       setTotalVideos(urlList.length);
       setCurrentVideo(0);
 
-      // Create a new ZIP file
-      const zip = new JSZip();
-
-      // Download each video and add it to the ZIP
+      // Process each video individually
       for (let i = 0; i < urlList.length; i++) {
         try {
+          setCurrentVideo(i);
+
+          // Download the video
           const response = await fetch("/api/download-tiktok", {
             method: "POST",
             headers: {
@@ -69,41 +73,42 @@ export function TikTokBulkDownloader() {
             throw new Error(errorData.error || "Failed to download video");
           }
 
-          const videoBlob = await response.blob();
-          const filename =
-            response.headers.get("X-Filename") ||
-            `tiktok-video-${Date.now()}.mp4`;
+          const { downloadUrl, filename } = await response.json();
 
-          // Add the video to the ZIP
-          zip.file(filename, videoBlob);
+          // Download the video from S3
+          const videoResponse = await fetch(downloadUrl);
+          if (!videoResponse.ok) {
+            throw new Error("Failed to download video from S3");
+          }
 
-          // Update progress
-          setCurrentVideo(i + 1);
+          const videoBlob = await videoResponse.blob();
+
+          // Add to downloaded videos array
+          downloadedVideos.push({
+            url: urlList[i],
+            filename,
+            blob: videoBlob,
+          });
         } catch (error) {
           console.error(`Error processing video from ${urlList[i]}:`, error);
-          currentFailedDownloads.push(urlList[i]);
           setFailedDownloads((prev) => [...prev, urlList[i]]);
         }
       }
 
-      // Check if any videos were successfully downloaded
-      if (Object.keys(zip.files).length === 0) {
-        toast.error("No videos downloaded", {
-          description:
-            "All videos failed to download. Please check your URLs and try again.",
-          duration: 5000,
-        });
-        return;
-      }
+      // Create zip file with all downloaded videos
+      const zip = new JSZip();
+      downloadedVideos.forEach(({ filename, blob }) => {
+        zip.file(filename, blob);
+      });
 
-      // Generate the ZIP file
+      // Generate and download zip file
       const zipBlob = await zip.generateAsync({ type: "blob" });
-      saveAs(zipBlob, "tiktok-videos.zip");
+      saveAs(zipBlob, `tiktok_videos_${Date.now()}.zip`);
 
       // Show success message with failed downloads if any
-      if (currentFailedDownloads.length > 0) {
+      if (failedDownloads.length > 0) {
         toast.success("Download completed with some failures", {
-          description: `Successfully downloaded ${Object.keys(zip.files).length} videos. Failed to download ${currentFailedDownloads.length} videos.`,
+          description: `Successfully downloaded ${downloadedVideos.length} videos. Failed to download ${failedDownloads.length} videos.`,
           duration: 5000,
         });
       } else {
@@ -112,8 +117,11 @@ export function TikTokBulkDownloader() {
         });
       }
     } catch (error) {
+      console.error("Error downloading videos:", error);
       toast.error("Error", {
-        description: `Failed to process videos: ${error}`,
+        description: `Failed to download videos: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
       });
     } finally {
       setProcessing(false);

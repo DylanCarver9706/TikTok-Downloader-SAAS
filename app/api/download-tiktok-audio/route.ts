@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import ffmpeg from "ffmpeg.js/ffmpeg-mp4.js";
+import { uploadToS3AndGetUrl } from "@/lib/s3";
 
 export async function POST(request: Request) {
   try {
@@ -20,15 +21,20 @@ export async function POST(request: Request) {
     });
 
     if (!videoResponse.ok) {
-      throw new Error("Failed to download video");
+      const errorData = await videoResponse.json();
+      throw new Error(errorData.error || "Failed to download video");
     }
 
-    const videoBlob = await videoResponse.blob();
-    const filename =
-      videoResponse.headers.get("X-Filename") || "tiktok-video.mp4";
-    const audioFilename = filename.replace(".mp4", ".mp3");
+    const { downloadUrl: videoDownloadUrl, filename: videoFilename } =
+      await videoResponse.json();
 
-    // Convert blob to Uint8Array for ffmpeg
+    // Download the video from S3
+    const videoBlobResponse = await fetch(videoDownloadUrl);
+    if (!videoBlobResponse.ok) {
+      throw new Error("Failed to download video from S3");
+    }
+
+    const videoBlob = await videoBlobResponse.blob();
     const videoBuffer = await videoBlob.arrayBuffer();
     const videoData = new Uint8Array(videoBuffer);
 
@@ -57,17 +63,26 @@ export async function POST(request: Request) {
       throw new Error("Failed to extract audio");
     }
 
-    // Create response with the audio file
-    return new NextResponse(outputFile.data, {
-      headers: {
-        "Content-Type": "audio/mpeg",
-        "Content-Disposition": `attachment; filename="${audioFilename}"`,
-      },
+    // Generate a filename for the audio file
+    const audioFilename = videoFilename.replace(".mp4", ".mp3");
+
+    // Upload to S3 and get pre-signed URL
+    const { url: downloadUrl } = await uploadToS3AndGetUrl(
+      outputFile.data.slice().buffer,
+      audioFilename
+    );
+
+    return NextResponse.json({
+      downloadUrl,
+      filename: audioFilename,
     });
   } catch (error) {
     console.error("Error processing audio:", error);
     return NextResponse.json(
-      { error: "Failed to process audio" },
+      {
+        error:
+          error instanceof Error ? error.message : "Failed to process audio",
+      },
       { status: 500 }
     );
   }

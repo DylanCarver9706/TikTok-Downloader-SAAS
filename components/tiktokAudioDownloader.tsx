@@ -43,23 +43,30 @@ export function TikTokAudioDownloader() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to extract audio");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to extract audio");
       }
 
-      const audioBlob = await response.blob();
-      const filename =
-        response.headers
-          .get("Content-Disposition")
-          ?.split("filename=")[1]
-          ?.replace(/"/g, "") || "tiktok-audio.mp3";
+      const { downloadUrl, filename } = await response.json();
 
-      saveAs(audioBlob, filename);
+      // Download the audio from S3
+      const audioResponse = await fetch(downloadUrl);
+      if (!audioResponse.ok) {
+        throw new Error("Failed to download audio from S3");
+      }
+
+      const blob = await audioResponse.blob();
+      saveAs(blob, filename);
+
       toast.success("Success!", {
         description: "Your TikTok audio has been downloaded successfully",
       });
     } catch (error) {
+      console.error("Error downloading audio:", error);
       toast.error("Error", {
-        description: `Failed to download audio: ${error}`,
+        description: `Failed to download audio: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
       });
     } finally {
       setProcessing(false);
