@@ -18,7 +18,7 @@ To use this template for your own project, follow these steps:
    ```
    # PostHog Analytics
    NEXT_PUBLIC_POSTHOG_KEY=your_posthog_project_api_key
-   POSTHOG_HOST=https://us.i.posthog.com
+   NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
    ```
 
    To get this key:
