@@ -42,6 +42,7 @@ export async function downloadWithRetry(
       }
 
       const jsonData = JSON.parse(scriptMatch[1]);
+      const webUrl = jsonData["__DEFAULT_SCOPE__"]["seo.abtest"]["canonical"];
       const videoData =
         jsonData["__DEFAULT_SCOPE__"]["webapp.video-detail"].itemInfo.itemStruct
           .video;
@@ -64,10 +65,10 @@ export async function downloadWithRetry(
       const videoResponse = await fetch(playUrl);
       const videoBuffer = await videoResponse.arrayBuffer();
 
-      const originalFilename = `${url.split("/")[3].split("@")[1]}_${
-        url.split("/")[5]
+      const fileName = `${webUrl.split("/")[3].split("@")[1]}_${
+        webUrl.split("/")[5]
       }.mp4`;
-      const sanitizedFilename = sanitizeFilename(originalFilename);
+      const sanitizedFilename = sanitizeFilename(fileName);
 
       return {
         success: true,

@@ -11,6 +11,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "URL is required" }, { status: 400 });
     }
 
+    if (
+      !url.includes("tiktok.com") ||
+      (!url.includes(".com/@") && !url.includes(".com/t/")) ||
+      (url.includes(".com/@") && !url.includes("/video/"))
+    ) {
+      return NextResponse.json(
+        { error: "Invalid TikTok URL" },
+        { status: 400 }
+      );
+    }
+
     // Download the video directly using the shared function
     const result = await downloadWithRetry(url);
 

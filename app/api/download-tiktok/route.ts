@@ -11,21 +11,6 @@ export const config = {
   },
 };
 
-// Helper function to sanitize filenames
-function sanitizeFilename(filename: string): string {
-  // Replace any characters that are not alphanumeric, dots, or underscores with an underscore
-  return filename.replace(/[^a-zA-Z0-9.-]/g, "_");
-}
-
-interface DownloadResult {
-  success: boolean;
-  error?: Error;
-  data?: {
-    buffer: ArrayBuffer;
-    filename: string;
-  };
-}
-
 
 export async function POST(req: Request) {
   try {
@@ -37,8 +22,8 @@ export async function POST(req: Request) {
 
     if (
       !url.includes("tiktok.com") ||
-      !url.includes(".com/@") ||
-      !url.includes("/video/")
+      (!url.includes(".com/@") && !url.includes(".com/t/")) ||
+      (url.includes(".com/@") && !url.includes("/video/"))
     ) {
       return NextResponse.json(
         { error: "Invalid TikTok URL" },
@@ -51,11 +36,7 @@ export async function POST(req: Request) {
     if (!result.success || !result.data) {
       console.error("Video download failed:", result.error);
       return NextResponse.json(
-        {
-          error: `Failed to download video: ${
-            result.error?.message || "Unknown error"
-          }`,
-        },
+        { error: "Invalid TikTok URL or something went wrong" },
         { status: 500 }
       );
     }
