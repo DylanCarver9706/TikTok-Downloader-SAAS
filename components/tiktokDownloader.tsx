@@ -77,7 +77,7 @@ export function TikTokDownloader() {
   };
 
   return (
-    <div className="w-full max-w-[800px] mx-auto">
+    <div className="w-full max-w-[800px] mx-auto p-4">
       <Card className="p-8 bg-white shadow-lg">
         <div className="space-y-8">
           {/* URL Input Section */}

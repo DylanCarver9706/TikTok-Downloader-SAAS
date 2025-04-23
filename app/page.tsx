@@ -16,7 +16,7 @@ export default function Home() {
       <GenerateStructuredData id="webapp-schema" type="webapp" />
 
       <Hero />
-      <SEOContent />
+      <SEOContent includeFeatures={true} />
     </main>
   );
 }
