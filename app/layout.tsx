@@ -4,14 +4,25 @@ import { PostHogProvider } from "./providers/posthog";
 import { Navbar } from "@/components/navbar";
 import { Toaster } from "sonner";
 import { Inter } from "next/font/google";
+import { generatePageMetadata } from "@/components/seo/metadata";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "TTok Downloader",
-  description: "TTok Downloader",
-  // Only works for development. For production, use the favicon.ico file.
+  ...generatePageMetadata({
+    title: "TTok Downloader - Download TikTok Videos Without Watermark",
+    path: "/",
+  }),
+  authors: [{ name: "TTokDownloader" }],
+  creator: "TTokDownloader",
+  publisher: "TTokDownloader",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL("https://ttokdownloader.com"),
   icons: {
     icon: "/TTokDownloaderLogo.PNG",
     shortcut: "/TTokDownloaderLogo.PNG",

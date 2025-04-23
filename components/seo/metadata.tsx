@@ -5,7 +5,7 @@ interface PageMetadataProps {
   description?: string;
   additionalKeywords?: string[];
   path?: string;
-  type?: "website" | "article";
+  type?: "website";
 }
 
 export function generatePageMetadata({
