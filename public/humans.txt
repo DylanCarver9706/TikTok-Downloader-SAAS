@@ -1,0 +1,14 @@
+/* TEAM */
+Developer: TTokDownloader
+Site: https://ttokdownloader.com
+
+/* THANKS */
+Next.js - https://nextjs.org
+Tailwind CSS - https://tailwindcss.com
+
+/* SITE */
+Last update: 2025
+Language: English
+Doctype: HTML5
+Components: React, TypeScript, Next.js
+Software: Visual Studio Code, Cursor
