@@ -14,10 +14,10 @@ export default function ContactUs() {
             <p className="text-xl text-gray-700">
               Email:{" "}
               <a
-                href="mailto:carverendeavors@gmail.com"
+                href="mailto:carver.endeavors.llc@gmail.com"
                 className="text-theme-700 hover:text-theme-900"
               >
-                carverendeavors@gmail.com
+                carver.endeavors.llc@gmail.com
               </a>
             </p>
           </div>

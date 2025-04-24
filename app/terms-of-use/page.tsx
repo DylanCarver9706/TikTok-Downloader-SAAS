@@ -431,7 +431,9 @@ export default function TermsOfUse() {
               >
                 Privacy Policy
               </Link>{" "}
-              and your assent to these Terms also signifies your assent to the Privacy Policy. We reserve the right to amend the Privacy Policy at any time by posting such amendments to the Website. No other
+              and your assent to these Terms also signifies your assent to the
+              Privacy Policy. We reserve the right to amend the Privacy Policy
+              at any time by posting such amendments to the Website. No other
               notification may be made to you about any amendments. Your
               continued use of the Website following such amendments will
               constitute your acceptance of such amendments, regardless of
@@ -462,7 +464,7 @@ export default function TermsOfUse() {
               believe that any of your copyrighted material is being infringed
               on the Website, we have designated an agent to receive
               notifications of claimed copyright infringement. Notifications
-              should be e-mailed to carverendeavors@gmail.com.
+              should be e-mailed to carver.endeavors.llc@gmail.com.
             </li>
             <li>
               All notifications not relevant to us or ineffective under the law
